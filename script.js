@@ -1,5 +1,6 @@
 const board = document.querySelectorAll('.cell');
 const resetButton = document.getElementById('reset');
+const resetScoresButton = document.getElementById('resetScores');
 let currentPlayer = 'X';
 let gameState = Array(9).fill('');
 let scoreX = 0;
@@ -16,6 +17,20 @@ const winConditions = [
     [2, 4, 6],
 ];
 
+document.addEventListener('DOMContentLoaded', () => {
+    scoreX = parseInt(localStorage.getItem('scoreX')) || 0;
+    scoreO = parseInt(localStorage.getItem('scoreO')) || 0;
+    document.getElementById('scoreX').textContent = scoreX;
+    document.getElementById('scoreO').textContent = scoreO;
+});
+
+function updateScores() {
+    localStorage.setItem('scoreX', scoreX);
+    localStorage.setItem('scoreO', scoreO);
+    document.getElementById('scoreX').textContent = scoreX;
+    document.getElementById('scoreO').textContent = scoreO;
+}
+
 board.forEach(cell => {
     cell.addEventListener('click', () => {
         const index = cell.dataset.index;
@@ -28,10 +43,12 @@ board.forEach(cell => {
         if (winner) {
             if (winner === 'X') {
                 scoreX++;
+                updateScores();
                 document.getElementById('scoreX').textContent = scoreX;
                 alert(`Player X wins!`);
             } else if (winner === 'O') {
                 scoreO++;
+                updateScores();
                 document.getElementById('scoreO').textContent = scoreO;
                 alert(`Player O wins!`);
             }
@@ -48,7 +65,17 @@ board.forEach(cell => {
     });
 });
 
-resetButton.addEventListener('click', resetGame);
+resetButton.addEventListener('click', () => {
+    resetGame();
+});
+
+resetScoresButton.addEventListener('click', () => {
+    scoreX = 0;
+    scoreO = 0;
+    updateScores();
+    localStorage.removeItem('scoreX');
+    localStorage.removeItem('scoreO');
+});
 
 function makeAIMove() {
     let availableCells = gameState
@@ -65,13 +92,12 @@ function makeAIMove() {
     if (winner) {
         if (winner === 'X') {
             scoreX++;
-            document.getElementById('scoreX').textContent = scoreX;
             alert(`Player X wins!`);
         } else if (winner === 'O') {
             scoreO++;
-            document.getElementById('scoreO').textContent = scoreO;
             alert(`Player O wins!`);
         }
+        updateScores();
         resetGame();
     } else if (gameState.every(cell => cell !== '')) {
         alert("It's a draw!");
