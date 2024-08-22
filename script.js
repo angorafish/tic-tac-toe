@@ -28,11 +28,32 @@ board.forEach(cell => {
             alert("It's a draw!");
         } else {
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+            makeAIMove();
         }
     });
 });
 
 resetButton.addEventListener('click', resetGame);
+
+function makeAIMove() {
+    let availableCells = gameState
+        .map((cell, index) => (cell === '' ? index : null))
+        .filter(index => index !== null);
+
+    const randomIndex = Math.floor(Math.random() * availableCells.length);
+    const aiMove = availableCells[randomIndex];
+
+    gameState[aiMove] = currentPlayer;
+    board[aiMove].textContent = currentPlayer;
+
+    if (checkWin()) {
+        alert(`${currentPlayer} wins!`);
+    } else if (gameState.every(cell => cell !== '')) {
+        alert("It's a draw!");
+    } else {
+        currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    }
+}
 
 function checkWin() {
     return winConditions.some(condition => {
