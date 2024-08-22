@@ -1,11 +1,28 @@
 body {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Futura', Arial, Helvetica, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f4f4f4;
+    background-color: #000;
+    color: #00ff00
+}
+
+.scoreboard {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 1.5rem;
+    text-align: left;
+    color: #00ff00;
+}
+
+#resetScores {
+    margin-top: 10px;
+    background-color: #333;
+    color: #00ff00;
+    border: 2px solid #00ff00;
 }
 
 .game-container {
@@ -23,23 +40,23 @@ body {
 .cell {
     width: 100px;
     height: 100px;
-    background-color: #fff;
+    background-color: #333;
+    color: #00ff00;
     display: flex;
     justify-content: center;
     align-items: center;
     font-size: 2rem;
     cursor: pointer;
-    border: 2px solid #000;
+    border: 2px solid #00ff00;
 }
 
 button {
     padding: 10px 20px;
     font-size: 1rem;
     cursor: pointer;
-}
-
-.scoreboard {
+    background-color: #333;
+    color: #00ff00;
+    border: 2px solid #00ff00;
+    border-radius: 5px;
     margin-top: 20px;
-    font-size: 1.2rem;
-    text-align: center;
 }
