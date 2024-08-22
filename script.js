@@ -2,6 +2,8 @@ const board = document.querySelectorAll('.cell');
 const resetButton = document.getElementById('reset');
 let currentPlayer = 'X';
 let gameState = Array(9).fill('');
+let scoreX = 0;
+let scoreO = 0;
 
 const winConditions = [
     [0, 1, 2],
@@ -17,18 +19,31 @@ const winConditions = [
 board.forEach(cell => {
     cell.addEventListener('click', () => {
         const index = cell.dataset.index;
-        if (gameState[index] !== '' || checkWin()) return;
+        if (gameState[index] !== '' || checkWinner()) return;
 
         gameState[index] = currentPlayer;
         cell.textContent = currentPlayer;
         
-        if (checkWin()) {
-            alert(`${currentPlayer} wins!`);
+        const winner = checkWinner();
+        if (winner) {
+            if (winner === 'X') {
+                scoreX++;
+                document.getElementById('scoreX').textContent = scoreX;
+                alert(`Player X wins!`);
+            } else if (winner === 'O') {
+                scoreO++;
+                document.getElementById('scoreO').textContent = scoreO;
+                alert(`Player O wins!`);
+            }
+            resetGame();
         } else if (gameState.every(cell => cell !== '')) {
             alert("It's a draw!");
+            resetGame();
         } else {
             currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-            makeAIMove();
+            if (currentPlayer === 'O') {
+                makeAIMove();
+            }
         }
     });
 });
@@ -46,19 +61,34 @@ function makeAIMove() {
     gameState[aiMove] = currentPlayer;
     board[aiMove].textContent = currentPlayer;
 
-    if (checkWin()) {
-        alert(`${currentPlayer} wins!`);
+    const winner = checkWinner();
+    if (winner) {
+        if (winner === 'X') {
+            scoreX++;
+            document.getElementById('scoreX').textContent = scoreX;
+            alert(`Player X wins!`);
+        } else if (winner === 'O') {
+            scoreO++;
+            document.getElementById('scoreO').textContent = scoreO;
+            alert(`Player O wins!`);
+        }
+        resetGame();
     } else if (gameState.every(cell => cell !== '')) {
         alert("It's a draw!");
+        resetGame();
     } else {
         currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
     }
 }
 
-function checkWin() {
-    return winConditions.some(condition => {
-        return condition.every(index => gameState[index] === currentPlayer);
-    });
+function checkWinner() {
+    for (let condition of winConditions) {
+        const [a, b, c] = condition;
+        if (gameState[a] && gameState[a] === gameState[b] && gameState[a] === gameState[c]) {
+            return gameState[a];
+        }
+    }
+    return null;
 }
 
 function resetGame() {
